@@ -21,11 +21,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         ${montserrat.className}`}
       >
         <div
-          className="h-screen w-screen static skew-x-0 origin-bottom-left 
+          className="h-screen w-screen absolute skew-x-0 origin-bottom-left 
           bg-[url('/hero.jpg')] bg-cover brightness-[25%] md:skew-x-[-5deg]
-          md:absolute md:w-[65%] md:left-[-15%]"
+          md:w-[65%] md:left-[-15%]"
         />
-        <div className="container h-full max-w-2xl mx-auto flex flex-col z-50 py-8">
+        <div className="container h-full max-w-2xl mx-auto flex flex-col z-50 py-8 px-4">
           <Header />
           <main className="flex z-50">
             <UserProvider>{children}</UserProvider>

@@ -79,9 +79,9 @@ export function Form() {
 
   return (
     <form className="flex flex-col" onSubmit={onSubmit}>
-      <div className="mb-5">
-        <div className="flex">
-          <div className="flex-col mr-2 w-1/2">
+      <div className="mb-0 md:mb-5">
+        <div className="flex flex-col md:flex-row">
+          <div className="flex-col mb-4 mr-0 w-full md:w-1/2 md:mb-0 md:mr-2">
             <label
               htmlFor="name"
               className="block mb-2 text-sm font-semibold text-gray-900"
@@ -97,10 +97,11 @@ export function Form() {
                 dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="ex.: Guilherme Neves"
               required
+              data-testid="inputName"
               {...register('name')}
             />
           </div>
-          <div className="flex-col w-1/2">
+          <div className="flex-col mb-4 w-full md:w-1/2 md:mb-0">
             <label
               htmlFor="phone"
               className="block mb-2 text-sm font-semibold text-gray-900"
@@ -117,6 +118,7 @@ export function Form() {
                 ${errors?.phone && 'mb-1'}`}
               placeholder="ex.: (21) 98765-9087"
               required
+              data-testid="inputPhone"
               {...register('phone')}
             />
             {errors?.phone && (
@@ -131,8 +133,8 @@ export function Form() {
         </div>
       </div>
       <div className="mb-8">
-        <div className="flex">
-          <div className="flex-col mr-2 w-1/2">
+        <div className="flex flex-col md:flex-row">
+          <div className="flex-col mb-4 mr-0 w-full md:w-1/2 md:mb-0 md:mr-2">
             <label
               htmlFor="balance"
               className="block mb-2 text-sm font-semibold text-gray-900"
@@ -148,10 +150,11 @@ export function Form() {
                 dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="ex.: R$ 5.000,00"
               required
+              data-testid="inputBalance"
               {...register('balance')}
             />
           </div>
-          <div className="flex-col w-1/2">
+          <div className="flex-col w-full md:w-1/2">
             <label
               htmlFor="months"
               className="block mb-2 text-sm font-semibold text-gray-900"
@@ -193,6 +196,7 @@ export function Form() {
       focus:ring-yellow-300 font-semibold rounded text-sm w-full sm:w-auto px-5 py-2.5 
         text-center dark:bg-yellow-500 dark:hover:bg-yellow-600 dark:focus:ring-yellow-600 
         transition-all h-11"
+        data-testid="buttonSubmit"
       >
         Ver proposta
       </button>
