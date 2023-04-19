@@ -31,10 +31,6 @@ jest.mock('../../contexts/UserContext', () => {
   }
 })
 
-// const mockRegister = jest.fn((name, phone, balance, birthdayMonth) => {
-//   return Promise.resolve({ name, phone, balance, birthdayMonth })
-// })
-
 describe('Form component', () => {
   it('should render', () => {
     render(<Form />)
