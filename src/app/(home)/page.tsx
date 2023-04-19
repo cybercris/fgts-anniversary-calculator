@@ -1,5 +1,5 @@
-import { Form } from './components/Form'
-import { InfoSection } from './components/InfoSection'
+import { Form } from './Form'
+import { InfoSection } from '../../components/InfoSection'
 
 export default function Home() {
   return (

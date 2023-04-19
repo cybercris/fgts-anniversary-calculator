@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 export function Header() {
   return (
-    <header className="relative flex items-center mb-4">
+    <header className="relative flex items-center mb-6">
       <Image
         width={20}
         height={20}

@@ -1,9 +1,9 @@
 import { ReactNode } from 'react'
 import { Montserrat } from 'next/font/google'
 
-import { UserProvider } from '@/app/contexts/UserContext'
+import { UserProvider } from '@/contexts/UserContext'
 
-import { Header } from './components/Header'
+import { Header } from '../components/Header'
 
 import './globals.css'
 

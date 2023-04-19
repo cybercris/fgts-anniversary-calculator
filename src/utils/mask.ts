@@ -27,11 +27,8 @@ const formatter = new Intl.NumberFormat('pt-BR', {
 
 export const normalizeBalanceBRL = (value: string) => {
   if (!value) return ''
-
   const onlyDigits = value.replace(/[^\d]/g, '')
-
   const formattedNumber = formatter.format(Number(onlyDigits) / 100)
-
   return formattedNumber
 }
 

@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import { SlClose } from 'react-icons/sl'
 
-import { useUser } from '@/app/contexts/UserContext'
+import { useUser } from '@/contexts/UserContext'
 import {
   normalizeBalanceBRL,
   normalizeName,
@@ -14,6 +14,7 @@ import {
   unmaskBalanceURL,
 } from '@/utils/mask'
 
+// TODO: COLOCAR PRA DENTRO DO .ENV
 const API_KEY = 'c7e236db777d4bc593ee012fbee062ab'
 const BASE_URL = 'https://phonevalidation.abstractapi.com/v1/'
 
@@ -66,15 +67,15 @@ export function Form() {
 
   useEffect(() => {
     setValue('name', normalizeName(nameValue))
-  }, [nameValue])
+  }, [nameValue, setValue])
 
   useEffect(() => {
     setValue('phone', normalizePhoneNumber(phoneValue))
-  }, [phoneValue])
+  }, [phoneValue, setValue])
 
   useEffect(() => {
     setValue('balance', normalizeBalanceBRL(balanceValue))
-  }, [balanceValue])
+  }, [balanceValue, setValue])
 
   return (
     <form className="flex flex-col" onSubmit={onSubmit}>
