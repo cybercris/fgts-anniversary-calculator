@@ -1,15 +1,22 @@
 'use client'
 
 import { useUser } from '@/app/contexts/UserContext'
+import { InfoSection } from '../components/InfoSection'
+import { formatNumberToCurrencyBRL } from '@/utils/mask'
 
 export default function Result() {
   const { user } = useUser()
 
-  console.log(user)
-
   return (
     <div className="h-full">
-      <h1>{user?.name}</h1>
+      <InfoSection title={`Olá, ${user?.name}!`} />
+      <section className="bg-white w-full rounded-xl px-12 py-10">
+        <div className="grid grid-cols-2">
+          <div className="flex flex-col">
+            <h1>{formatNumberToCurrencyBRL(user?.withdrawFgts)}</h1>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }

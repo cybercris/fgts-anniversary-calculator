@@ -1,8 +1,9 @@
 import { ReactNode } from 'react'
-import Image from 'next/image'
 import { Montserrat } from 'next/font/google'
 
 import { UserProvider } from '@/app/contexts/UserContext'
+
+import { Header } from './components/Header'
 
 import './globals.css'
 
@@ -25,18 +26,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           md:absolute md:w-[65%] md:left-[-15%]"
         />
         <div className="container h-full max-w-2xl mx-auto flex flex-col z-50 py-8">
-          <header className="relative flex items-center mb-4">
-            <Image
-              width={20}
-              height={20}
-              alt="smile co. logo"
-              title="smile co. logo"
-              src="/logo.svg"
-              quality={100}
-              className="mr-2"
-            />
-            <span className="text-white text-xs font-semibold">SMILE Co.</span>
-          </header>
+          <Header />
           <main className="flex z-50">
             <UserProvider>{children}</UserProvider>
           </main>

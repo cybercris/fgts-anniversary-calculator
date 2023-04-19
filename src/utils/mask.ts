@@ -1,5 +1,6 @@
 export const normalizeName = (value: string) => {
   if (!value) return ''
+
   const cleanedValue = value.replace(/[^A-Za-z\s]/g, '')
   const words = cleanedValue.split(/\s+/)
   const capitalizedWords = words.map(
@@ -18,18 +19,30 @@ export const normalizePhoneNumber = (value: String | undefined) => {
     .replace(/(-\d{4})(\d+?)/, '$1')
 }
 
+const formatter = new Intl.NumberFormat('pt-BR', {
+  style: 'currency',
+  currency: 'BRL',
+  minimumFractionDigits: 2,
+})
+
 export const normalizeBalanceBRL = (value: string) => {
   if (!value) return ''
 
   const onlyDigits = value.replace(/[^\d]/g, '')
 
-  const formatter = new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-    minimumFractionDigits: 2,
-  })
-
   const formattedNumber = formatter.format(Number(onlyDigits) / 100)
 
   return formattedNumber
+}
+
+export const unmaskBalanceURL = (value: string): number | undefined => {
+  if (!value) return undefined
+
+  const formattedBalance = value.replace(/[^\d,]/g, '').replace(',', '.')
+  return parseFloat(formattedBalance)
+}
+
+export const formatNumberToCurrencyBRL = (value: number | undefined) => {
+  if (!value) return undefined
+  return formatter.format(value)
 }

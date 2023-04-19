@@ -11,9 +11,11 @@ import {
   normalizeBalanceBRL,
   normalizeName,
   normalizePhoneNumber,
+  unmaskBalanceURL,
 } from '@/utils/mask'
 
 const API_KEY = 'c7e236db777d4bc593ee012fbee062ab'
+const BASE_URL = 'https://phonevalidation.abstractapi.com/v1/'
 
 interface FormData {
   name: string
@@ -34,8 +36,8 @@ export function Form() {
   const { setUser } = useUser()
   const router = useRouter()
 
-  const onSubmit = async (data) => {
-    const url = `https://phonevalidation.abstractapi.com/v1/?api_key=${API_KEY}&phone=${data?.phone}`
+  const onSubmit = handleSubmit(async (data) => {
+    const url = `${BASE_URL}?api_key=${API_KEY}&phone=${data?.phone}`
 
     try {
       const response = await axios.get(url)
@@ -44,9 +46,11 @@ export function Form() {
         setError('phone', { type: 'invalid', message: 'Telefone Inválido' })
 
       if (response.data.valid) {
+        const formattedBalance = unmaskBalanceURL(data.balance)
+
         setUser({
           name: data.name,
-          balanceFgts: Number(data.balance),
+          balanceFgts: formattedBalance,
           birthdayMonth: data.birthdayMonth,
         })
         router.push('/result')
@@ -54,7 +58,7 @@ export function Form() {
     } catch (error) {
       console.log(error)
     }
-  }
+  })
 
   const nameValue = watch('name')
   const phoneValue = watch('phone')
@@ -73,20 +77,20 @@ export function Form() {
   }, [balanceValue])
 
   return (
-    <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-6">
+    <form className="flex flex-col" onSubmit={onSubmit}>
+      <div className="mb-5">
         <div className="flex">
           <div className="flex-col mr-2 w-1/2">
             <label
               htmlFor="name"
-              className="block mb-2 text-sm font-medium text-gray-900"
+              className="block mb-2 text-sm font-semibold text-gray-900"
             >
               Qual seu nome?
             </label>
             <input
               type="text"
               id="name"
-              className="h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded
+              className="h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded font-semibold
                 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700
                 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
                 dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -98,14 +102,14 @@ export function Form() {
           <div className="flex-col w-1/2">
             <label
               htmlFor="phone"
-              className="block mb-2 text-sm font-medium text-gray-900"
+              className="block mb-2 text-sm font-semibold text-gray-900"
             >
               Qual seu telefone?
             </label>
             <input
               type="tel"
               id="phone"
-              className={`h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded
+              className={`h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded font-semibold
                 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700
                 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
                 dark:focus:ring-blue-500 dark:focus:border-blue-500
@@ -115,7 +119,7 @@ export function Form() {
               {...register('phone')}
             />
             {errors?.phone && (
-              <div className="flex h-12 px-4 items-center bg-red-100 rounded">
+              <div className="flex h-12 px-4 items-center bg-red-100 rounded font-semibold">
                 <SlClose size={24} className="text-red-800 mr-3" />
                 <span className="text-sm font-semibold text-red-800">
                   {errors?.phone?.message}
@@ -125,19 +129,19 @@ export function Form() {
           </div>
         </div>
       </div>
-      <div className="mb-6">
+      <div className="mb-8">
         <div className="flex">
           <div className="flex-col mr-2 w-1/2">
             <label
               htmlFor="balance"
-              className="block mb-2 text-sm font-medium text-gray-900"
+              className="block mb-2 text-sm font-semibold text-gray-900"
             >
               Qual seu saldo?
             </label>
             <input
               type="text"
               id="balance"
-              className="h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded
+              className="h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded font-semibold
                 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700
                 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
                 dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -149,19 +153,23 @@ export function Form() {
           <div className="flex-col w-1/2">
             <label
               htmlFor="months"
-              className="block mb-2 text-sm font-medium text-gray-900"
+              className="block mb-2 text-sm font-semibold text-gray-900"
             >
               Qual seu mês de aniversário?
             </label>
             <select
               id="months"
-              className="h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded
+              className="h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded font-semibold
                 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700
                 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
                 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              defaultValue=""
+              required
               {...register('birthdayMonth')}
             >
-              <option selected>Selecione...</option>
+              <option value="" disabled>
+                Selecione...
+              </option>
               <option value="JAN">Janeiro</option>
               <option value="FEB">Fevereiro</option>
               <option value="MAR">Março</option>
@@ -180,9 +188,10 @@ export function Form() {
       </div>
       <button
         type="submit"
-        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none
-         focus:ring-blue-300 font-medium rounded text-sm w-full sm:w-auto px-5 py-2.5 
-         text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        className="text-white bg-yellow-400 hover:bg-yellow-600 focus:ring-4 focus:outline-none
+      focus:ring-yellow-300 font-semibold rounded text-sm w-full sm:w-auto px-5 py-2.5 
+        text-center dark:bg-yellow-500 dark:hover:bg-yellow-600 dark:focus:ring-yellow-600 
+        transition-all h-11"
       >
         Ver proposta
       </button>

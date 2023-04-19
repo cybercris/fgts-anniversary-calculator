@@ -13,7 +13,7 @@ import { calculateWithdrawFgtsAmount } from '@/utils'
 interface User {
   name: string
   birthdayMonth: string
-  balanceFgts: number
+  balanceFgts?: number
   withdrawFgts?: number
 }
 
@@ -37,8 +37,11 @@ export function UserProvider({ children }: UserProviderProps) {
   })
 
   useEffect(() => {
-    if (user?.balanceFgts) {
-      const totalWithdrawAmount = calculateWithdrawFgtsAmount(user.balanceFgts)
+    if (user.balanceFgts && user.balanceFgts > 0) {
+      const totalWithdrawAmount = calculateWithdrawFgtsAmount(
+        user.balanceFgts,
+        user.birthdayMonth,
+      )
 
       setUser((prevUser) => {
         if (prevUser.withdrawFgts !== totalWithdrawAmount) {
@@ -51,7 +54,7 @@ export function UserProvider({ children }: UserProviderProps) {
         return prevUser
       })
     }
-  }, [user?.balanceFgts])
+  }, [user.balanceFgts, user.birthdayMonth])
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
