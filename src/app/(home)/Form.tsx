@@ -34,6 +34,7 @@ export function Form() {
     setValue,
     formState: { errors },
   } = useForm<FormData>()
+  // console.log('Form ~ errors:', errors)
   const { setUser } = useUser()
   const router = useRouter()
 
@@ -42,11 +43,11 @@ export function Form() {
 
     try {
       const response = await axios.get(url)
+      console.log('onSubmit ~ response:', response)
 
-      if (!response.data.valid)
+      if (!response.data.valid) {
         setError('phone', { type: 'invalid', message: 'Telefone Inválido' })
-
-      if (response.data.valid) {
+      } else {
         const formattedBalance = unmaskBalanceURL(data.balance)
 
         setUser({
@@ -54,6 +55,7 @@ export function Form() {
           balanceFgts: formattedBalance,
           birthdayMonth: data.birthdayMonth,
         })
+        console.log('chegou aqui router')
         router.push('/result')
       }
     } catch (error) {
@@ -169,6 +171,7 @@ export function Form() {
               defaultValue=""
               required
               {...register('birthdayMonth')}
+              data-testid="selectMonth"
             >
               <option value="" disabled>
                 Selecione...
