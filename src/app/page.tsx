@@ -1,7 +1,7 @@
 'use client'
 import { RiMoneyDollarBoxLine } from 'react-icons/ri'
 
-import Form from '../components/Form'
+import { Form } from './components/Form'
 
 export default function Home() {
   return (

@@ -1,9 +1,15 @@
-import Image from 'next/image'
+'use client'
+
+import { useUser } from '@/app/contexts/UserContext'
 
 export default function Result() {
+  const { user } = useUser()
+
+  console.log(user)
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1>result</h1>
-    </main>
+    <div className="h-full">
+      <h1>{user?.name}</h1>
+    </div>
   )
 }

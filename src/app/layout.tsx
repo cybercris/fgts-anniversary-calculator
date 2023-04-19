@@ -2,6 +2,8 @@ import { ReactNode } from 'react'
 import Image from 'next/image'
 import { Montserrat } from 'next/font/google'
 
+import { UserProvider } from '@/app/contexts/UserContext'
+
 import './globals.css'
 
 const montserrat = Montserrat({ subsets: ['latin'] })
@@ -35,7 +37,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             />
             <span className="text-white text-xs font-semibold">SMILE Co.</span>
           </header>
-          <main className="flex z-50">{children}</main>
+          <main className="flex z-50">
+            <UserProvider>{children}</UserProvider>
+          </main>
         </div>
       </body>
     </html>

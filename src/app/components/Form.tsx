@@ -1,7 +1,10 @@
 'use client'
 
-import axios from 'axios'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
+import axios from 'axios'
+
+import { useUser } from '@/app/contexts/UserContext'
 
 const API_KEY = 'c7e236db777d4bc593ee012fbee062ab'
 
@@ -12,13 +15,15 @@ interface FormData {
   birthdayMonth: string
 }
 
-export default function Form() {
+export function Form() {
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors },
   } = useForm<FormData>()
+  const { setUser } = useUser()
+  const router = useRouter()
 
   const onSubmit = async (data) => {
     const url = `https://phonevalidation.abstractapi.com/v1/?api_key=${API_KEY}&phone=${data?.phone}`
@@ -26,10 +31,17 @@ export default function Form() {
     try {
       const response = await axios.get(url)
 
-      if (!response?.data?.valid)
+      if (!response.data.valid)
         setError('phone', { type: 'invalid', message: 'Telefone Inválido' })
 
-      if (response?.data?.valid) console.log('Telefone válido')
+      if (response.data.valid) {
+        setUser({
+          name: data.name,
+          balanceFgts: Number(data.balance),
+          birthdayMonth: data.birthdayMonth,
+        })
+        router.push('/result')
+      }
     } catch (error) {
       console.log(error)
     }
