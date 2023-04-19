@@ -1,10 +1,17 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
+import { SlClose } from 'react-icons/sl'
 
 import { useUser } from '@/app/contexts/UserContext'
+import {
+  normalizeBalanceBRL,
+  normalizeName,
+  normalizePhoneNumber,
+} from '@/utils/mask'
 
 const API_KEY = 'c7e236db777d4bc593ee012fbee062ab'
 
@@ -20,6 +27,8 @@ export function Form() {
     register,
     handleSubmit,
     setError,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<FormData>()
   const { setUser } = useUser()
@@ -47,6 +56,22 @@ export function Form() {
     }
   }
 
+  const nameValue = watch('name')
+  const phoneValue = watch('phone')
+  const balanceValue = watch('balance')
+
+  useEffect(() => {
+    setValue('name', normalizeName(nameValue))
+  }, [nameValue])
+
+  useEffect(() => {
+    setValue('phone', normalizePhoneNumber(phoneValue))
+  }, [phoneValue])
+
+  useEffect(() => {
+    setValue('balance', normalizeBalanceBRL(balanceValue))
+  }, [balanceValue])
+
   return (
     <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-6">
@@ -61,7 +86,10 @@ export function Form() {
             <input
               type="text"
               id="name"
-              className="h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded
+                focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700
+                dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
+                dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="ex.: Guilherme Neves"
               required
               {...register('name')}
@@ -77,12 +105,23 @@ export function Form() {
             <input
               type="tel"
               id="phone"
-              className="h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className={`h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded
+                focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700
+                dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
+                dark:focus:ring-blue-500 dark:focus:border-blue-500
+                ${errors?.phone && 'mb-1'}`}
               placeholder="ex.: (21) 98765-9087"
               required
               {...register('phone')}
             />
-            {errors.phone && <p>{errors.phone.message}</p>}
+            {errors?.phone && (
+              <div className="flex h-12 px-4 items-center bg-red-100 rounded">
+                <SlClose size={24} className="text-red-800 mr-3" />
+                <span className="text-sm font-semibold text-red-800">
+                  {errors?.phone?.message}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -96,9 +135,12 @@ export function Form() {
               Qual seu saldo?
             </label>
             <input
-              type="balance"
-              id="number"
-              className="h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              type="text"
+              id="balance"
+              className="h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded
+                focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700
+                dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
+                dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="ex.: R$ 5.000,00"
               required
               {...register('balance')}
@@ -113,7 +155,10 @@ export function Form() {
             </label>
             <select
               id="months"
-              className="h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="h-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded
+                focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700
+                dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
+                dark:focus:ring-blue-500 dark:focus:border-blue-500"
               {...register('birthdayMonth')}
             >
               <option selected>Selecione...</option>
@@ -135,7 +180,9 @@ export function Form() {
       </div>
       <button
         type="submit"
-        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none
+         focus:ring-blue-300 font-medium rounded text-sm w-full sm:w-auto px-5 py-2.5 
+         text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
         Ver proposta
       </button>

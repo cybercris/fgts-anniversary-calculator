@@ -6,7 +6,7 @@ import { Form } from './components/Form'
 export default function Home() {
   return (
     <div className="h-full">
-      <div className="flex mb-8">
+      <section className="flex mb-8">
         <h1 className="font-bold text-4xl text-white italic text-left w-[50%]">
           Use uma grana que já é sua e saia do aperto.
         </h1>
@@ -25,10 +25,10 @@ export default function Home() {
             </p>
           </div>
         </div>
-      </div>
-      <div className="bg-white w-full rounded-xl px-12 py-6">
+      </section>
+      <section className="bg-white w-full rounded-xl px-12 py-6">
         <Form />
-      </div>
+      </section>
     </div>
   )
 }
