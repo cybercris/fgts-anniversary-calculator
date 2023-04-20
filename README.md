@@ -15,6 +15,7 @@ ser sacado, e que esse valor pode variar de acordo com o saldo disponível na co
 
 ## 🧰 Dependências
 
+- Next 13 
 - Axios para requisições HTTP
 - TailwindCSS como UI Framework para estilização POSTCSS
 - React Hook Form para validação de formulários
