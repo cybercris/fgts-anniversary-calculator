@@ -12,6 +12,7 @@ import {
   normalizeName,
   normalizePhoneNumber,
   unmaskBalanceURL,
+  unmaskPhoneNumber,
 } from '@/utils/mask'
 
 // TODO: COLOCAR PRA DENTRO DO .ENV
@@ -38,7 +39,9 @@ export function Form() {
   const router = useRouter()
 
   const onSubmit = handleSubmit(async (data) => {
-    const url = `${BASE_URL}?api_key=${API_KEY}&phone=${data?.phone}`
+    const url = `${BASE_URL}?api_key=${API_KEY}&phone=${unmaskPhoneNumber(
+      `55${data?.phone}`,
+    )}`
 
     try {
       const response = await axios.get(url)

@@ -19,6 +19,11 @@ export const normalizePhoneNumber = (value: String | undefined) => {
     .replace(/(-\d{4})(\d+?)/, '$1')
 }
 
+export const unmaskPhoneNumber = (value: String | undefined) => {
+  if (!value) return ''
+  return value.replace(/[^0-9]/g, '')
+}
+
 const formatter = new Intl.NumberFormat('pt-BR', {
   style: 'currency',
   currency: 'BRL',
